@@ -35,24 +35,25 @@ namespace AdventOfCode2018
         public string  reducePolymer(string polymer)
         {
             Regex regex = new Regex(@"(?<char>.)\k<char>", RegexOptions.IgnoreCase);
-            MatchCollection matches = regex.Matches(polymer);
-            bool removedPolymers = true;
-            while (matches != null && removedPolymers)
-            {
-                removedPolymers = false;
+            Match match;
+            int startMatch = 0;
 
-                foreach (Match match in matches)
+            while ((match = regex.Match(polymer, startMatch)).Success)
+            {
+                string possibleReaction = match.Value;
+
+                if ((char.IsLower(possibleReaction[0]) && char.IsUpper(possibleReaction[1])) ||
+                    (char.IsLower(possibleReaction[1]) && char.IsUpper(possibleReaction[0])))
                 {
-                    string possibleReaction = match.Value;
-                    if ((char.IsLower(possibleReaction[0]) && char.IsUpper(possibleReaction[1])) ||
-                        (char.IsLower(possibleReaction[1]) && char.IsUpper(possibleReaction[0])))
-                    {
-                        polymer = polymer.Replace(possibleReaction, "");
-                        removedPolymers = true;
-                    }
+                    polymer = polymer.Remove(match.Index, 2);
+                    startMatch = startMatch - 1 >= 0 ? --startMatch : 0;
                 }
-                matches = regex.Matches(polymer);
+                else
+                {
+                    startMatch = match.Index + 1;
+                }
             }
+
             return polymer;
         }
 
