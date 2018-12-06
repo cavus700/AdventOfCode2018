@@ -97,7 +97,7 @@ namespace AdventOfCode2018
             return Math.Abs(cord1.Item1 - cord2.Item1) + Math.Abs(cord1.Item2 - cord2.Item2);
         }
 
-        public static int CountArea(ref int[,] grid, int area)
+        private int CountArea(ref int[,] grid, int area)
         {
             int result = 0;
             for (int iY = 0; iY < grid.GetLength(0); ++iY)
